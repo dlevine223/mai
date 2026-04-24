@@ -1,47 +1,28 @@
-/**
- * WordPress GraphQL client for headless frontend.
- *
- * Uses WPGraphQL endpoint on the WordPress backend.
- * All content is fetched via GraphQL — never REST API.
- */
-
-const WORDPRESS_API_URL =
-  process.env.NEXT_PUBLIC_WORDPRESS_URL ?? "https://mairebuilddev1.wpenginepowered.com";
-
-const GRAPHQL_ENDPOINT = `${WORDPRESS_API_URL}/graphql`;
-
-interface GraphQLResponse<T = unknown> {
-  data?: T;
-  errors?: Array<{ message: string }>;
-}
-
-export async function fetchGraphQL<T = unknown>(
-  query: string,
-  variables?: Record<string, unknown>
-): Promise<T> {
-  const res = await fetch(GRAPHQL_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query, variables }),
-    next: { revalidate: 60 }, // ISR: revalidate every 60 seconds
-  });
-
-  if (!res.ok) {
-    throw new Error(`GraphQL request failed: ${res.status} ${res.statusText}`);
+{
+  "name": "marchmanactinfo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@wpengine/atlas-next": "^1.0.0",
+    "next": "14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5"
   }
-
-  const json: GraphQLResponse<T> = await res.json();
-
-  if (json.errors) {
-    console.error("GraphQL errors:", json.errors);
-    throw new Error(json.errors.map((e) => e.message).join(", "));
-  }
-
-  if (!json.data) {
-    throw new Error("No data returned from GraphQL");
-  }
-
-  return json.data;
 }
