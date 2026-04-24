@@ -1,0 +1,41 @@
+const WORDPRESS_API_URL =
+  process.env.NEXT_PUBLIC_WORDPRESS_URL ??
+  "https://mairebuilddev1.wpenginepowered.com";
+
+const GRAPHQL_ENDPOINT = `${WORDPRESS_API_URL}/graphql`;
+
+interface GraphQLResponse<T = unknown> {
+  data?: T;
+  errors?: Array<{ message: string }>;
+}
+
+export async function fetchGraphQL<T = unknown>(
+  query: string,
+  variables?: Record<string, unknown>
+): Promise<T> {
+  const res = await fetch(GRAPHQL_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query, variables }),
+    next: { revalidate: 60 },
+  });
+
+  if (!res.ok) {
+    throw new Error(
+      `GraphQL request failed: ${res.status} ${res.statusText}`
+    );
+  }
+
+  const json: GraphQLResponse<T> = await res.json();
+
+  if (json.errors) {
+    console.error("GraphQL errors:", json.errors);
+    throw new Error(json.errors.map((e) => e.message).join(", "));
+  }
+
+  if (!json.data) {
+    throw new Error("No data returned from GraphQL");
+  }
+
+  return json.data;
+}
