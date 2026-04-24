@@ -1,35 +1,18 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env*.local
-.env
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+{
+  "name": "marchmanactinfo",
+  "repo": "dlevine223/mai",
+  "region": "US-C",
+  "environments": [
+    {
+      "name": "Development",
+      "branch": "main",
+      "wp_environment_name": "mairebuilddev1",
+      "env_variables": [
+        {
+          "key": "NEXT_PUBLIC_WORDPRESS_URL",
+          "value": "https://mairebuilddev1.wpenginepowered.com"
+        }
+      ]
+    }
+  ]
+}
