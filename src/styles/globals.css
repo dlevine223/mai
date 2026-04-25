@@ -15,21 +15,29 @@
   }
 
   html {
-    @apply antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-white text-body font-sans;
+    background-color: #FFFFFF;
+    color: #111827;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    @apply text-navy font-black;
+    color: var(--navy);
+    font-weight: 900;
   }
 
   a {
-    @apply text-teal hover:text-teal-accent transition-colors;
+    color: var(--teal);
+    transition: color 150ms ease;
+  }
+
+  a:hover {
+    color: var(--accent);
   }
 }
